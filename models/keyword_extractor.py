@@ -1,9 +1,17 @@
-
 from keybert import KeyBERT
 
+# Do NOT load KeyBERT when the application starts.
+# It will be loaded only when keyword extraction is actually needed.
+_model = None
 
-# Create the model only once
-model = KeyBERT()
+
+def get_model():
+    global _model
+
+    if _model is None:
+        _model = KeyBERT()
+
+    return _model
 
 
 def extract_keywords(text):
@@ -11,6 +19,8 @@ def extract_keywords(text):
     # Check if transcript is empty
     if not text or len(text.strip()) < 20:
         return []
+
+    model = get_model()
 
     # Extract meaningful keywords / phrases
     keywords = model.extract_keywords(
@@ -37,4 +47,3 @@ def extract_keywords(text):
             keyword_list.append(word)
 
     return keyword_list
-
