@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Performance | LectureMind</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+<div class="site-shell">
+  <nav class="glass-nav"><a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">LM</span><span>LectureMind</span></a><div class="nav-links"><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('lecture_history') }}">History</a><a class="nav-button" href="{{ url_for('logout') }}">Logout</a></div></nav>
+  <main class="quiz-page">
+    <header class="page-heading compact-heading"><p class="eyebrow">Your Learning Data</p><h1>Performance</h1><p>Stats reflect saved lecture quizzes only.</p></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<p class="flash {{ category }}">{{ message }}</p>{% endfor %}{% endwith %}
+    <section class="performance-stats"><article class="glass-card"><span class="card-index">{{ stats.lectures_processed }}</span><h3>Lectures Processed</h3></article><article class="glass-card"><span class="card-index">{{ stats.quizzes_attempted }}</span><h3>Quizzes Attempted</h3></article><article class="glass-card"><span class="card-index">{{ stats.average_score }}%</span><h3>Average Score</h3></article><article class="glass-card"><span class="card-index">{{ stats.questions_answered }}</span><h3>Questions Answered</h3></article></section>
+    <section class="glass-panel"><p class="eyebrow">Recent Trend</p><h2>Quiz scores over time</h2><div class="performance-chart" data-scores='{{ attempts|map(attribute="percentage")|list|tojson }}'></div></section>
+    <section class="glass-panel revision-section"><p class="eyebrow">Personalized Revision</p><h2>Weak Concepts</h2>{% if revision_recommendations %}<p class="muted">Recommended Revision</p><div class="revision-list">{% for item in revision_recommendations %}<article class="revision-item"><div><p class="eyebrow">{{ item.lecture_title }}</p><h3>{{ item.concept }}</h3><p class="muted">Questions attempted: {{ item.total }} | Correct: {{ item.correct }} | Incorrect: {{ item.incorrect }} | Accuracy: {{ item.percentage }}%</p><p>{{ item.explanation }}</p></div><div class="revision-actions"><a class="btn btn-secondary" href="{{ url_for('view_lecture', lecture_id=item.lecture_id, concept=item.concept) }}">Review Concept</a><a class="btn btn-primary" href="{{ url_for('practice_concept', lecture_id=item.lecture_id, concept=item.concept) }}">Practice Again</a></div></article>{% endfor %}</div>{% else %}<p class="empty-content">Great! No concepts need revision yet.</p>{% endif %}</section>
+    {% if topic_accuracy %}<section class="glass-panel"><p class="eyebrow">Topic Accuracy</p><h2>Accuracy by lecture concept</h2><div class="topic-list">{% for topic in topic_accuracy %}<div><span>{{ topic.concept }}</span><strong>{{ topic.percentage }}%</strong></div>{% endfor %}</div></section>{% endif %}
+    <section class="glass-panel table-wrap"><p class="eyebrow">Recent Attempts</p><h2>Quiz history</h2><table class="user-table"><thead><tr><th>Lecture</th><th>Subject</th><th>Score</th><th>Percentage</th><th>Date</th></tr></thead><tbody>{% for attempt in attempts %}<tr><td>{{ attempt.lectures.title if attempt.lectures else 'Lecture' }}</td><td>{{ attempt.lectures.subject if attempt.lectures else '-' }}</td><td>{{ attempt.score }} / {{ attempt.total_questions }}</td><td>{{ attempt.percentage }}%</td><td>{{ attempt.created_at[:10] }}</td></tr>{% else %}<tr><td colspan="5">No quiz attempts yet.</td></tr>{% endfor %}</tbody></table></section>
+  </main>
+</div>
+</body>
+</html>

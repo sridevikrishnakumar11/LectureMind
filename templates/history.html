@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Lecture History | LectureMind</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+
+<body>
+
+<div class="site-shell">
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+
+        <a class="brand"
+           href="{{ url_for('home') }}"
+           aria-label="LectureMind home">
+
+            <span class="brand-mark">LM</span>
+            <span>LectureMind</span>
+
+        </a>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('lecture_history') }}"
+               class="active">
+                📚 History
+            </a>
+
+            {% if profile.role == 'Student' %}<a href="{{ url_for('performance') }}">📊 Performance</a>{% endif %}
+
+            <a class="nav-button"
+               href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="history-page">
+
+        <header class="history-heading">
+
+            <p class="eyebrow">
+                Your Workspace
+            </p>
+
+            <h1>
+                Lecture History
+            </h1>
+
+            <p>
+                Welcome back, <strong>{{ profile.name }}</strong>.
+                View and revisit your previously processed lectures.
+            </p>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <p class="flash {{ category }}">
+                    {{ message }}
+                </p>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        {% if lectures %}
+
+            <section class="history-grid">
+
+                {% for lecture in lectures %}
+
+                    <article class="history-card">
+
+                        <div class="history-card-top">
+
+                            <div class="lecture-icon">
+                                📚
+                            </div>
+
+                            <span class="status-badge">
+                                {{ lecture.processing_status }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-card-content">
+
+                            <h2>
+                                <a href="{{ url_for('view_lecture', lecture_id=lecture.id) }}">
+                                    {{ lecture.title }}
+                                </a>
+                            </h2>
+
+
+                            <p class="lecture-subject">
+                                <span>Subject</span>
+                                {{ lecture.subject or "Not specified" }}
+                            </p>
+
+
+                            <p class="lecture-date">
+                                🕒 {{ lecture.created_at }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="history-card-footer">
+
+                            <a class="view-lecture-btn"
+                               href="{{ url_for('view_lecture', lecture_id=lecture.id) }}">
+
+                                View Lecture
+                                <span>→</span>
+
+                            </a>
+
+                            {% if profile.role == 'Student' %}<a class="view-lecture-btn"
+                               href="{{ url_for('take_quiz', lecture_id=lecture.id) }}">
+                                Take Quiz <span>→</span>
+                            </a>{% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </section>
+
+        {% else %}
+
+            <section class="empty-history glass-panel">
+
+                <div class="empty-icon">
+                    📚
+                </div>
+
+                <h2>
+                    No lectures yet
+                </h2>
+
+                <p>
+                    Your processed lectures will appear here.
+                    Upload your first lecture to get started.
+                </p>
+
+                <a class="btn btn-primary"
+                   href="{{ url_for('dashboard') }}">
+                    Upload a Lecture
+                </a>
+
+            </section>
+
+        {% endif %}
+
+
+        <div class="history-back">
+
+            <a href="{{ url_for('dashboard') }}">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+</body>
+</html>

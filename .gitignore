@@ -1,0 +1,13 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+*.mp3
+ffmpeg.exe
+
+instance/
+keywords/
+transcripts/
+uploads/

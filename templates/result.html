@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Results | LectureMind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="glass-nav">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="LectureMind home">
+                <span class="brand-mark">LM</span>
+                <span>LectureMind</span>
+            </a>
+            <div class="nav-links" aria-label="Navigation">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('home') }}#flow">How It Works</a>
+                <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="results-layout">
+            <header class="page-heading compact-heading">
+                <p class="eyebrow">Ready</p>
+                <h1>Lecture map generated.</h1>
+            </header>
+
+            <section class="results-grid">
+                <article class="glass-panel result-panel transcript-panel">
+                    <div class="panel-heading row-heading">
+                        <div>
+                            <p class="eyebrow">Transcript</p>
+                            <h2>Notes</h2>
+                        </div>
+                        <a class="link-button" href="{{ url_for('download_transcript') }}">Download</a>
+                    </div>
+                    <div class="transcript-box">{{ transcript }}</div>
+                </article>
+
+                <article class="glass-panel result-panel">
+                    <div class="panel-heading row-heading">
+                        <div>
+                            <p class="eyebrow">Keywords</p>
+                            <h2>Concepts</h2>
+                        </div>
+                        <a class="link-button" href="{{ url_for('download_keywords') }}">Download</a>
+                    </div>
+                    <div class="keyword-list">
+                        {% for word in keywords %}
+                            <span>{{ word }}</span>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="glass-panel result-panel mindmap-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Mind map</p>
+                        <h2>Overview</h2>
+                    </div>
+                    <div class="mindmap-visual">
+                        <div class="mindmap-center">Lecture</div>
+                        {% for word in keywords %}
+                            <div class="mindmap-branch branch-{{ loop.index0 % 8 }}">{{ word }}</div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </section>
+
+            <div class="result-actions">
+                <a class="btn btn-primary" href="{{ url_for('dashboard') }}">New upload</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

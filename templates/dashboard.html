@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | LectureMind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="glass-nav">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="LectureMind home">
+                <span class="brand-mark">LM</span>
+                <span>LectureMind</span>
+            </a>
+            <div class="nav-links" aria-label="Navigation">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('lecture_history') }}">📚 Lecture History</a>
+                {% if profile.role == 'Student' %}<a href="{{ url_for('performance') }}">📊 Performance</a>{% endif %}
+                <a href="{{ url_for('home') }}#flow">How It Works</a>
+                <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="dashboard-layout">
+            <header class="page-heading compact-heading">
+                <p class="eyebrow">Workspace</p>
+                <h1>Welcome, {{ profile.name }}.</h1>
+                <p>Upload lecture audio to create a transcript, extract key concepts, and generate a mind map.</p>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endwith %}
+
+            <section class="workspace-grid">
+                <div class="upload-panel glass-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Input</p>
+                        <h2>MP3 or WAV</h2>
+                    </div>
+                    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+                        <div>
+      <label for="title">Lecture Title</label>
+        <input
+         type="text"
+         id="title"
+         name="title"
+            placeholder="Enter lecture title"
+            required
+            >
+        </div>
+
+    <div>
+        <label for="subject">Subject</label>
+        <input
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="Enter subject"
+            required
+         >
+    </div>
+                        <label class="dropzone" for="audio">
+                            <span class="drop-symbol">UP</span>
+                            <strong id="file-label">Choose audio</strong>
+                            <small>100 MB max</small>
+                            <input id="audio" type="file" name="audio" accept=".mp3,.wav" required>
+                        </label>
+                        <button class="btn btn-primary full-width" type="submit" data-processing-text="Processing...">
+                            Generate
+                        </button>
+                    </form>
+                </div>
+
+                <aside class="glass-panel checklist-panel" aria-label="Outputs">
+                    <p class="eyebrow">Output</p>
+                    <h2>Notes. Keywords. Map.</h2>
+                    <ul class="clean-list">
+                        <li><span></span>Transcript</li>
+                        <li><span></span>Keywords</li>
+                        <li><span></span>Mind map</li>
+                        <li><span></span>Downloads</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section class="content-section process-section">
+                <div class="timeline">
+                    <div><span>1</span><h3>Upload</h3></div>
+                    <div><span>2</span><h3>Whisper</h3></div>
+                    <div><span>3</span><h3>KeyBERT</h3></div>
+                    <div><span>4</span><h3>Mind Map</h3></div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

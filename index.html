@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LectureMind</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script defer src="static/js/script.js"></script>
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="glass-nav">
+            <a class="brand" href="index.html" aria-label="LectureMind home">
+                <span class="brand-mark">LM</span>
+                <span>LectureMind</span>
+            </a>
+            <div class="nav-links" aria-label="Navigation">
+                <a href="#app">App</a>
+                <a href="#flow">Flow</a>
+                <a class="nav-button" href="http://127.0.0.1:5000/login">Launch</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="hero-section clean-hero">
+                <div class="hero-content">
+                    <p class="eyebrow">Lecture to mind map</p>
+                    <h1>Study from audio faster.</h1>
+                    <p class="hero-copy">Upload. Transcribe. Map.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="http://127.0.0.1:5000/login">Open app</a>
+                    </div>
+                </div>
+
+                <aside class="hero-glass" aria-label="LectureMind preview">
+                    <div class="preview-toolbar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="audio-card">
+                        <p>Lecture.mp3</p>
+                        <div class="audio-wave" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="mindmap-preview">
+                        <div class="mindmap-node center-node">Lecture</div>
+                        <div class="mindmap-node node-a">Transcript</div>
+                        <div class="mindmap-node node-b">Keywords</div>
+                        <div class="mindmap-node node-c">Mind Map</div>
+                    </div>
+                </aside>
+            </section>
+
+            <section id="app" class="workspace-grid">
+                <div class="upload-panel glass-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Workspace</p>
+                        <h2>Upload audio</h2>
+                    </div>
+                    <form>
+                        <label class="dropzone" for="audio">
+                            <span class="drop-symbol">UP</span>
+                            <strong id="file-label">Choose MP3 or WAV</strong>
+                            <small>Preview only</small>
+                            <input id="audio" type="file" accept=".mp3,.wav">
+                        </label>
+                        <a class="btn btn-primary full-width" href="http://127.0.0.1:5000/login">Use Flask app</a>
+                    </form>
+                </div>
+
+                <aside id="flow" class="glass-panel checklist-panel">
+                    <p class="eyebrow">Flow</p>
+                    <h2>Full app</h2>
+                    <ul class="clean-list">
+                        <li><span></span>Login</li>
+                        <li><span></span>Upload</li>
+                        <li><span></span>Results</li>
+                        <li><span></span>Downloads</li>
+                    </ul>
+                </aside>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

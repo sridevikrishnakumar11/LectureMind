@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LectureMind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="glass-nav">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="LectureMind home">
+                <span class="brand-mark">LM</span>
+                <span>LectureMind</span>
+            </a>
+            <div class="nav-links" aria-label="Navigation">
+                <a href="#features">Features</a>
+                <a href="#flow">Flow</a>
+                <a class="nav-button" href="{{ url_for('login_page') }}">Login</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="hero-section clean-hero">
+                <div class="hero-content">
+                    <p class="eyebrow">Lecture to mind map</p>
+                    <h1>Study from audio faster.</h1>
+                    <p class="hero-copy">Upload. Transcribe. Map.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="{{ url_for('login_page') }}">Open app</a>
+                    </div>
+                </div>
+
+                <aside class="hero-glass" aria-label="LectureMind preview">
+                    <div class="preview-toolbar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="audio-card">
+                        <p>Lecture.mp3</p>
+                        <div class="audio-wave" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="mindmap-preview">
+                        <div class="mindmap-node center-node">Lecture</div>
+                        <div class="mindmap-node node-a">Transcript</div>
+                        <div class="mindmap-node node-b">Keywords</div>
+                        <div class="mindmap-node node-c">Mind Map</div>
+                    </div>
+                </aside>
+            </section>
+
+            <section id="features" class="content-section">
+                <div class="feature-grid">
+                    <article class="glass-card">
+                        <span class="card-index">01</span>
+                        <h3>Transcribe</h3>
+                    </article>
+                    <article class="glass-card">
+                        <span class="card-index">02</span>
+                        <h3>Extract</h3>
+                    </article>
+                    <article class="glass-card">
+                        <span class="card-index">03</span>
+                        <h3>Visualize</h3>
+                    </article>
+                    <article class="glass-card">
+                        <span class="card-index">04</span>
+                        <h3>Download</h3>
+                    </article>
+                </div>
+            </section>
+
+            <section id="flow" class="content-section workflow-band">
+                <div class="timeline">
+                    <div><span>1</span><h3>Login</h3></div>
+                    <div><span>2</span><h3>Upload</h3></div>
+                    <div><span>3</span><h3>Process</h3></div>
+                    <div><span>4</span><h3>Review</h3></div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

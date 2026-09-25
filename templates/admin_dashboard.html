@@ -1,0 +1,449 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin Dashboard | LectureMind</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="site-shell">
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+
+        <a class="brand" href="{{ url_for('home') }}">
+            <span class="brand-mark">LM</span>
+            <span>LectureMind</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+
+            <a href="{{ url_for('admin_dashboard') }}">
+                Admin Dashboard
+            </a>
+
+            <a class="nav-button" href="{{ url_for('logout') }}">
+                Logout
+            </a>
+        </div>
+
+    </nav>
+
+
+    <main>
+
+        <!-- Page Heading -->
+        <header class="page-heading compact-heading">
+
+            <p class="eyebrow">Administration</p>
+
+            <h1>
+                Welcome, {{ profile.name }}.
+            </h1>
+
+            <p>
+                Manage registered users and review LectureMind access control.
+            </p>
+
+        </header>
+
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <p class="flash {{ category }}">
+                    {{ message }}
+                </p>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- Admin Overview -->
+        <section class="admin-grid">
+
+            <article class="glass-card">
+
+                <span class="card-index">
+                    {{ students|length }}
+                </span>
+
+                <h3>Students</h3>
+
+                <p>
+                    Registered student accounts.
+                </p>
+
+            </article>
+
+
+            <article class="glass-card">
+
+                <span class="card-index">
+                    {{ lecturers|length }}
+                </span>
+
+                <h3>Lecturers</h3>
+
+                <p>
+                    Registered lecturer accounts.
+                </p>
+
+            </article>
+
+
+            <article class="glass-card">
+
+                <span class="card-index">
+                    RBAC
+                </span>
+
+                <h3>Access Control</h3>
+
+                <p>
+                    Only Students and Lecturers may process lecture audio.
+                </p>
+
+            </article>
+
+        </section>
+
+
+        <!-- Student Table -->
+        <section class="role-tables">
+
+            <section class="glass-panel user-table-panel">
+
+                <div class="panel-heading">
+
+                    <p class="eyebrow">Students</p>
+
+                    <h2>Student Table</h2>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="user-table">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for user in students %}
+
+                            <tr>
+
+                                <td>
+                                    {{ user.name }}
+                                </td>
+
+                                <td>
+                                    {{ user.email }}
+                                </td>
+
+                                <td>
+                                    {{ user.created_at[:10]
+                                       if user.created_at
+                                       else '—' }}
+                                </td>
+
+                            </tr>
+
+                            {% else %}
+
+                            <tr>
+                                <td colspan="3">
+                                    No students registered yet.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- Lecturer Table -->
+            <section class="glass-panel user-table-panel">
+
+                <div class="panel-heading">
+
+                    <p class="eyebrow">Lecturers</p>
+
+                    <h2>Lecturer Table</h2>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="user-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for user in lecturers %}
+
+                            <tr>
+
+                                <td>
+                                    {{ user.name }}
+                                </td>
+
+                                <td>
+                                    {{ user.email }}
+                                </td>
+
+                                <td>
+                                    {{ user.created_at[:10]
+                                       if user.created_at
+                                       else '—' }}
+                                </td>
+
+                            </tr>
+
+                            {% else %}
+
+                            <tr>
+                                <td colspan="3">
+                                    No lecturers registered yet.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- User Management -->
+        <section class="glass-panel user-table-panel">
+
+            <div class="panel-heading">
+
+                <p class="eyebrow">Manage Users</p>
+
+                <h2>Registered Users</h2>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table class="user-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Registered</th>
+                            <th>Update</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for user in users %}
+
+                        <tr>
+
+                            <!-- Name -->
+                            <td>
+                                {{ user.name }}
+                            </td>
+
+
+                            <!-- Email -->
+                            <td>
+                                {{ user.email }}
+                            </td>
+
+
+                            <!-- Current Role -->
+                            <td>
+                                {{ user.role }}
+                            </td>
+
+
+                            <!-- Registration Date -->
+                            <td>
+                                {{ user.created_at[:10]
+                                   if user.created_at
+                                   else '—' }}
+                            </td>
+
+
+                            <!-- Role Update -->
+                            <td>
+
+                                {% if user.id == profile.id %}
+
+                                    <span class="muted">
+                                        Your account
+                                    </span>
+
+                                {% else %}
+
+                                    <form
+                                        class="role-form"
+                                        method="post"
+                                        action="{{ url_for(
+                                            'update_user_role',
+                                            user_id=user.id
+                                        ) }}"
+                                    >
+
+                                        <select name="role">
+
+                                            {% for role in [
+                                                'Student',
+                                                'Lecturer',
+                                                'Admin'
+                                            ] %}
+
+                                                <option
+                                                    value="{{ role }}"
+                                                    {% if user.role == role %}
+                                                        selected
+                                                    {% endif %}
+                                                >
+                                                    {{ role }}
+                                                </option>
+
+                                            {% endfor %}
+
+                                        </select>
+
+
+                                        <button
+                                            class="btn btn-secondary"
+                                            type="submit"
+                                        >
+                                            Save
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="5">
+                                No profiles are visible.
+                                Confirm the Supabase SQL setup.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Admin Permissions Information -->
+        <section class="glass-panel">
+
+            <div class="panel-heading">
+
+                <p class="eyebrow">Admin Permissions</p>
+
+                <h2>Access Rules</h2>
+
+            </div>
+
+            <div class="admin-permissions">
+
+                <p>
+                    ✓ Admin can view registered users.
+                </p>
+
+                <p>
+                    ✓ Admin can manage user roles.
+                </p>
+
+                <p>
+                    ✓ Students can upload and process lecture audio.
+                </p>
+
+                <p>
+                    ✓ Lecturers can upload and process lecture audio.
+                </p>
+
+                <p>
+                    ✕ Admin cannot upload lecture audio.
+                </p>
+
+                <p>
+                    ✕ Admin cannot generate transcripts or mind maps.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

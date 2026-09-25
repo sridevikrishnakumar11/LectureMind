@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | LectureMind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="site-shell compact-shell">
+        <nav class="glass-nav">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="LectureMind home">
+                <span class="brand-mark">LM</span>
+                <span>LectureMind</span>
+            </a>
+            <div class="nav-links" aria-label="Navigation">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a class="nav-button" href="{{ url_for('login_page') }}">Login</a>
+            </div>
+        </nav>
+
+        <main class="auth-layout minimal-auth">
+            <section class="auth-panel glass-panel">
+                <p class="eyebrow">Welcome</p>
+                <h1>Login</h1>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        <p class="flash {{ category }}">{{ message }}</p>
+                    {% endfor %}
+                {% endwith %}
+
+                <form class="form-stack" action="{{ url_for('check_login') }}" method="post">
+                    <label>
+                        Email
+                        <input type="email" name="email" autocomplete="email" required>
+                    </label>
+                    <label>
+                        Password
+                        <input type="password" name="password" autocomplete="current-password" required>
+                    </label>
+                    <button class="btn btn-primary full-width" type="submit">Login</button>
+                </form>
+                <p class="login-hint">New to LectureMind? <a href="{{ url_for('register_page') }}">Create an account</a></p>
+            </section>
+
+            <aside class="auth-side glass-panel" aria-label="LectureMind preview">
+                <span class="brand-mark large-mark">LM</span>
+                <h2>Audio in. Map out.</h2>
+                <div class="mini-stats">
+                    <div><strong>MP3</strong><span>Audio</span></div>
+                    <div><strong>WAV</strong><span>Audio</span></div>
+                    <div><strong>AI</strong><span>Notes</span></div>
+                </div>
+            </aside>
+        </main>
+    </div>
+</body>
+</html>
