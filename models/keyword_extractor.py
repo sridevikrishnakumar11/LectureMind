@@ -1,49 +1,44 @@
-from keybert import KeyBERT
-
-# Do NOT load KeyBERT when the application starts.
-# It will be loaded only when keyword extraction is actually needed.
-_model = None
-
-
-def get_model():
-    global _model
-
-    if _model is None:
-        _model = KeyBERT()
-
-    return _model
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 def extract_keywords(text):
-
-    # Check if transcript is empty
     if not text or len(text.strip()) < 20:
         return []
 
-    model = get_model()
-
-    # Extract meaningful keywords / phrases
-    keywords = model.extract_keywords(
-        text,
-        keyphrase_ngram_range=(1, 3),
+    # TF-IDF extracts words/phrases that are important
+    # within the lecture transcript.
+    vectorizer = TfidfVectorizer(
         stop_words="english",
-        use_mmr=True,
-        diversity=0.5,
-        top_n=10
+        ngram_range=(1, 3),
+        max_features=50
     )
 
-    keyword_list = []
+    try:
+        matrix = vectorizer.fit_transform([text])
+        scores = matrix.toarray()[0]
+        words = vectorizer.get_feature_names_out()
 
-    for word, score in keywords:
+        ranked = sorted(
+            zip(words, scores),
+            key=lambda x: x[1],
+            reverse=True
+        )
 
-        # Ignore very weak keywords
-        if score < 0.25:
-            continue
+        keywords = []
 
-        word = word.strip().lower()
+        for word, score in ranked:
+            if score <= 0:
+                continue
 
-        # Avoid duplicates
-        if word not in keyword_list:
-            keyword_list.append(word)
+            word = word.strip().lower()
 
-    return keyword_list
+            if word not in keywords:
+                keywords.append(word)
+
+            if len(keywords) == 10:
+                break
+
+        return keywords
+
+    except Exception:
+        return []
